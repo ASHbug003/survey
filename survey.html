@@ -1,0 +1,133 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clothing Preferences Survey</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: auto;
+        }
+        h1 {
+            color: #333;
+        }
+        img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .question {
+            text-align: left;
+            margin: 15px 0;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Clothing Preferences Survey</h1>
+        <img src="https://source.unsplash.com/600x300/?fashion,clothes" alt="Fashion Survey">
+        <form id="surveyForm">
+            <div class="question">
+                <label>What type of clothing do you wear most often?</label><br>
+                <input type="checkbox" name="clothing" value="Casual"> Casual<br>
+                <input type="checkbox" name="clothing" value="Formal"> Formal<br>
+                <input type="checkbox" name="clothing" value="Sportswear"> Sportswear<br>
+                <input type="checkbox" name="clothing" value="Ethnic"> Ethnic<br>
+                <input type="checkbox" name="clothing" value="Streetwear"> Streetwear
+            </div>
+            
+            <div class="question">
+                <label>How important is comfort when choosing clothes?</label><br>
+                <input type="radio" name="comfort" value="Very important" required> Very important<br>
+                <input type="radio" name="comfort" value="Somewhat important"> Somewhat important<br>
+                <input type="radio" name="comfort" value="Not important"> Not important
+            </div>
+
+            <div class="question">
+                <label>What fabric do you prefer for daily wear?</label><br>
+                <input type="checkbox" name="fabric" value="Cotton"> Cotton<br>
+                <input type="checkbox" name="fabric" value="Linen"> Linen<br>
+                <input type="checkbox" name="fabric" value="Polyester"> Polyester<br>
+                <input type="checkbox" name="fabric" value="Wool"> Wool<br>
+                <input type="checkbox" name="fabric" value="Silk"> Silk
+            </div>
+            
+            <div class="question">
+                <label>Do you prefer loose, regular, or slim-fit clothing?</label><br>
+                <input type="radio" name="fit" value="Loose" required> Loose<br>
+                <input type="radio" name="fit" value="Regular"> Regular<br>
+                <input type="radio" name="fit" value="Slim"> Slim
+            </div>
+            
+            <div class="question">
+                <label>Where do you mostly shop for clothes?</label><br>
+                <input type="checkbox" name="shopping" value="Online"> Online<br>
+                <input type="checkbox" name="shopping" value="Malls"> Malls<br>
+                <input type="checkbox" name="shopping" value="Local markets"> Local markets<br>
+                <input type="checkbox" name="shopping" value="Designer stores"> Designer stores<br>
+                <input type="checkbox" name="shopping" value="Thrift stores"> Thrift stores
+            </div>
+            
+            <button type="submit">Submit Survey</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('surveyForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(this);
+            let results = {};
+            
+            for (const [key, value] of formData.entries()) {
+                if (!results[key]) {
+                    results[key] = [];
+                }
+                results[key].push(value);
+            }
+            
+            fetch('https://formspree.io/f/mvoeqodr', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(results)
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            }).then(data => {
+                alert('Survey submitted successfully!');
+                document.getElementById('surveyForm').reset();
+            }).catch(error => {
+                alert('Error submitting survey');
+                console.error('Submission error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
